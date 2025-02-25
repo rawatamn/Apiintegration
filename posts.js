@@ -49,21 +49,43 @@ Promise.all([
         const postTitle = document.createElement("h3");
         postTitle.innerText = post.title;
 
-        // Create "View Comments" button with count
-        const commentButton = document.createElement("button");
-        commentButton.innerText = `View Comments (${totalComments})`; // ✅ Show count inside button
-        commentButton.classList.add("comment-btn");
-        commentButton.addEventListener("click", () => toggleComments(post.id, commentList, commentButton));
-
         // Create a container for comments (hidden by default)
         const commentList = document.createElement("div");
         commentList.classList.add("comment-list", "hidden"); // Initially hidden
+
+        // Create "View Comments" button with count
+        const commentButton = document.createElement("button");
+        commentButton.innerText = `View Comments (${totalComments})`; 
+        commentButton.classList.add("comment-btn");
+        commentButton.addEventListener("click", () => toggleComments(post.id, commentList, commentButton));
+
+        // ✅ Create comment input field
+        const commentInput = document.createElement("input");
+        commentInput.type = "text";
+        commentInput.placeholder = "Write a comment...";
+        commentInput.classList.add("comment-input");
+
+        // ✅ Create "Add Comment" button BELOW input field
+        const addCommentButton = document.createElement("button");
+        addCommentButton.innerText = "➕ Add Comment";
+        addCommentButton.classList.add("add-comment-btn");
+        //adding the functionality to catch input field
+        addCommentButton.addEventListener("click",()=>{
+            addComment(post.id,commentInput,commentList,commentButton)
+        })
+
+        // ✅ Comment Input Section (Input + Button in a separate div)
+        const commentInputContainer = document.createElement("div");
+        commentInputContainer.classList.add("comment-section");
+        commentInputContainer.appendChild(commentInput);
+        commentInputContainer.appendChild(addCommentButton); // ✅ Placed below input
 
         // Append elements to card
         card.appendChild(img);
         card.appendChild(postTitle);
         card.appendChild(commentButton);
         card.appendChild(commentList);
+        card.appendChild(commentInputContainer); // ✅ Input + Button together
         postContainer.appendChild(card);
     });
 })
@@ -71,19 +93,59 @@ Promise.all([
     console.warn("Error fetching posts:", error);
     postContainer.innerHTML = `<p>Failed to load posts.</p>`;
 });
+function addComment(postId,inputField,commentList,commentButton){
+    const commentText=inputField.value.trim()
+    if(commentText===""){
+        alert("please enter the text")
+    return;}
+    const newComment={
+        postId:postId,
+        name:"user",
+        email:"user@gmail",
+        body:commentText
+        
+    }
+    fetch(COMMENTS_API_URL,{
+        method:"POST",
+        body:JSON.stringify(newComment),
+        headers:{"Content-type":"application/json;charset=UTF-8"}
+    })
+    .then(response=>response.json())
+    .then(comment=>{
+        addCommentUI(comment,commentList)
+        inputField.value="";
+        const commentCountElement = commentButton;
+        const currentCount = parseInt(commentCountElement.innerText.match(/\d+/)[0]);
+        commentCountElement.innerText = `View Comments (${currentCount + 1})`;
+
+    })
+    .catch(error=>console.error("Error adding comment",error))
+}
+function addCommentUI(comment,commentList){
+  const commentItem = document.createElement("div");
+    commentItem.classList.add("comment-item");
+
+    // ✅ Comment text (Initially Normal Text)
+    const commentText = document.createElement("p");
+    commentText.classList.add("comment-text");
+    commentText.innerHTML = `<strong>${comment.name}:</strong> <span class="comment-body">${comment.body}</span>`;
+commentList.appendChild(commentText)
+    // ✅ Edit Button
+   
+}
 
 // Function to fetch and toggle comments
 function toggleComments(postId, commentList, button) {
     if (!commentList.classList.contains("hidden")) {
-        commentList.classList.add("hidden"); // Hide if already visible
-        button.innerText = button.innerText.replace("Hide Comments", "View Comments"); // Toggle text
+        commentList.classList.add("hidden"); 
+        button.innerText = button.innerText.replace("Hide Comments", "View Comments");
         return;
     }
 
     fetch(`${COMMENTS_API_URL}?postId=${postId}`)
         .then(response => response.json())
         .then(comments => {
-            commentList.innerHTML = ""; // Clear old comments
+            commentList.innerHTML = ""; 
             comments.forEach(comment => {
                 const commentItem = document.createElement("p");
                 commentItem.classList.add("comment");
@@ -91,8 +153,8 @@ function toggleComments(postId, commentList, button) {
                 commentList.appendChild(commentItem);
             });
 
-            commentList.classList.remove("hidden"); // Show comments
-            button.innerText = `Hide Comments (${comments.length})`; // Update button text
+            commentList.classList.remove("hidden");
+            button.innerText = `Hide Comments (${comments.length})`; 
         })
         .catch(error => console.error("Error fetching comments:", error));
 }
