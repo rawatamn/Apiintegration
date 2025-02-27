@@ -17,9 +17,9 @@ Promise.all([
         const card = document.createElement("div");
         card.classList.add("card");
 
-        // Create profile image
+        // Create profile image (Using UI Avatars for unique images)
         const profileImg = document.createElement("img");
-        profileImg.src = "Untitled.jpeg"; // Default profile picture
+        profileImg.src = `https://ui-avatars.com/api/?name=${user.name.replace(" ", "+")}&background=random&size=100`;
         profileImg.alt = "User Profile";
         profileImg.classList.add("profile-pic");
 
@@ -27,30 +27,30 @@ Promise.all([
         const name = document.createElement("h2");
         name.innerText = user.name;
         name.classList.add("clickable");
-        name.style.cursor = "pointer";
-        name.addEventListener("click", () => {
-            localStorage.setItem("selectedUserId", user.id); // Store user ID
-            localStorage.setItem("selectedUserName", user.name); // Store user name
-            window.location.href = "posts.html"; // Redirect to posts page
-        });
 
-        // Create user email
+        // Create email with mail icon
         const email = document.createElement("p");
-        email.innerHTML = `<strong>Email:</strong> ${user.email}`;
+        email.innerHTML = `📧 <strong>Email:</strong> ${user.email}`;
 
-        // Create user address
+        // Create address section
         const address = document.createElement("p");
         address.innerHTML = `
-            <strong>Street:</strong> ${user.address.street} <br>
-            <strong>City:</strong> ${user.address.city} <br>
-            <strong>Suite:</strong> ${user.address.suite} <br>
-            <strong>Zip Code:</strong> ${user.address.zipcode} <br>
-            <strong>Phone:</strong> ${user.phone}
+            📍 <strong>Address:</strong> ${user.address.street}, ${user.address.city}
         `;
 
         // Create post count
         const postCount = document.createElement("p");
-        postCount.innerHTML = `<strong>Total Posts:</strong> ${totalPosts}`;
+        postCount.innerHTML = `📝 <strong>Total Posts:</strong> ${totalPosts}`;
+
+        // Create "View Posts" button
+        const viewPostsBtn = document.createElement("button");
+        viewPostsBtn.innerText = "📜 View Posts";
+        viewPostsBtn.classList.add("view-posts-btn");
+        viewPostsBtn.addEventListener("click", () => {
+            localStorage.setItem("selectedUserId", user.id);
+            localStorage.setItem("selectedUserName", user.name);
+            window.location.href = "posts.html"; // Redirect to posts page
+        });
 
         // Append elements to card
         card.appendChild(profileImg);
@@ -58,6 +58,7 @@ Promise.all([
         card.appendChild(email);
         card.appendChild(address);
         card.appendChild(postCount);
+        card.appendChild(viewPostsBtn); // ✅ Added View Posts Button
 
         // Append card to container
         userContainer.appendChild(card);
