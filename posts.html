@@ -9,8 +9,42 @@
 </head>
 <body>
     <h1 id="userTitle"></h1>
-    <div id="postContainer"></div> <!-- Posts will be displayed here -->
 
+<!-- ✅ Back Button -->
+<button id="backBtn" class="back-btn">← Back</button>
+
+<!-- ✅ Create Post Button -->
+<button id="createPostBtn" class="create-post-btn">Create Post</button>
+
+
+<!-- ✅ Create Post Popup -->
+<div id="createPostPopup" class="popup hidden">
+    <div class="popup-content">
+        <h2>Create a New Post</h2>
+        <label>Title:</label>
+        <input type="text" id="newPostTitle">
+        <label>Body:</label>
+        <textarea id="newPostBody"></textarea>
+        <div class="popup-buttons">
+            <button id="savePost">Create</button>
+            <button id="cancelPost">Cancel</button>
+        </div>
+    </div>
+</div>
+    <div id="postContainer"></div> <!-- Posts will be displayed here -->
+    <div id="editPopup" class="popup hidden">
+        <div class="popup-content">
+            <h2>Edit Post</h2>
+            <label>Title:</label>
+            <input type="text" id="editTitle">
+            <label>Body:</label>
+            <textarea id="editBody"></textarea>
+            <div class="popup-buttons">
+                <button id="saveEdit">Save</button>
+                <button id="cancelEdit">Cancel</button>
+            </div>
+        </div>
+    </div>
     <script src="posts.js"></script> <!-- JavaScript file -->
 </body>
 </html>

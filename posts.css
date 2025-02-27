@@ -26,6 +26,9 @@ h1 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease;
+    position: relative; /* Needed for absolute comments */
+    overflow: visible; /* Ensure comments are not cut off */
+    z-index: 1; /* Default lower z-index */
 }
 
 .card:hover {
@@ -55,15 +58,27 @@ h1 {
     background-color: #0056b3;
 }
 
-/* Comments Section */
+/* Floating Comments Section */
 .comment-list {
-    text-align: left;
-    margin-top: 10px;
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    top: 100%;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     padding: 10px;
-    background: #f1f1f1;
     border-radius: 5px;
-    max-height: 200px;
-    overflow-y: auto;
+    display: none; /* Hidden by default */
+    z-index: 10; /* Ensures it appears above other elements */
+}
+
+/* Show comments when toggled */
+.card.active {
+    z-index: 100; /* Bring active card to front */
+}
+
+.comment-list:not(.hidden) {
+    display: block;
 }
 
 /* Individual Comment */
@@ -71,11 +86,6 @@ h1 {
     font-size: 14px;
     padding: 5px;
     border-bottom: 1px solid #ddd;
-}
-
-/* Hide comments by default */
-.hidden {
-    display: none;
 }
 
 /* Responsive */
@@ -87,5 +97,311 @@ h1 {
 
     .card {
         width: 90%;
+    }
+}
+/* Post Body */
+.post-body {
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+    margin: 10px 0;
+    padding: 5px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+/* ✅ Popup Background */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* ✅ Hide popup by default */
+.hidden {
+    display: none;
+}
+
+/* ✅ Popup Content Box */
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* ✅ Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ✅ Input Fields */
+.popup-content input,
+.popup-content textarea {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+}
+
+/* ✅ Button Container */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+/* ✅ Save Button */
+#saveEdit {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+}
+
+#saveEdit:hover {
+    background-color: #218838;
+}
+
+/* ✅ Cancel Button */
+#cancelEdit {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+}
+
+#cancelEdit:hover {
+    background-color: #c82333;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 480px) {
+    .popup-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .popup-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+.edit-btn{
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+}
+.edit-btn:hover{ background-color: #218838;}
+.delete-btn{
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+}
+.delete-btn:hover{
+    background-color: #c82333;
+}
+/* ✅ Create Post Button */
+/* ✅ Position "Create Post" Button in Top Right Corner */
+/* ✅ Position "Back" Button in Top Left Corner */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 12px 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
+}
+
+/* ✅ Position "Create Post" Button in Top Right Corner */
+.create-post-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 12px 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.create-post-btn:hover {
+    background-color: #218838;
+}
+
+/* ✅ Responsive Design - Adjust for Smaller Screens */
+@media (max-width: 768px) {
+    .back-btn, .create-post-btn {
+        top: 10px;
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    .back-btn {
+        left: 10px;
+    }
+
+    .create-post-btn {
+        right: 10px;
+    }
+}
+
+
+
+.create-post-btn:hover {
+    background-color: #218838;
+}
+
+/* ✅ Popup Background */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* ✅ Hide popup by default */
+.hidden {
+    display: none;
+}
+
+/* ✅ Popup Content Box */
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* ✅ Fade In Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ✅ Input Fields */
+.popup-content input,
+.popup-content textarea {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+}
+
+/* ✅ Button Container */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+/* ✅ Create Button */
+#savePost {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+}
+
+#savePost:hover {
+    background-color: #0056b3;
+}
+
+/* ✅ Cancel Button */
+#cancelPost {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+}
+
+#cancelPost:hover {
+    background-color: #c82333;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 480px) {
+    .popup-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .popup-buttons {
+        flex-direction: column;
+        gap: 10px;
     }
 }
